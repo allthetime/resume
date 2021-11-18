@@ -1,0 +1,119 @@
+<html>
+
+    <head>
+
+        <!-- style sheet -->
+
+        <style>
+
+
+            * { 
+                box-sizing: border-box;
+                margin: 0;
+            }
+
+            :root {
+                --blue: rgb(1, 94, 170);
+                --yellow: rgb(211, 137, 0);
+                --red: rgb(165, 0, 0);
+            }
+
+            h1,h2,h3,h4,h5 {
+                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+            }
+
+            .link {
+                cursor: pointer;
+            }
+
+            .link::before {
+                content: '∞ ';
+            }
+
+            span {
+                margin-top: 10px;
+                font-family: Georgia, 'Times New Roman', Times, serif;
+                font-size: 0.9em;
+            }
+
+            body {
+                margin-top: 10%;
+                margin-left: 5%;
+            }
+
+            article {
+                margin-top: 3em;
+            }
+
+            section {
+                margin-top: 1.5em;
+            }
+
+            a {
+                float: left;
+            }
+
+            header {
+                font-size: 1.3em;
+            }
+
+            h3 {
+                color: rgb(29, 21, 21);
+            }
+
+            h4 {
+                color: rgb(56, 51, 36);
+            }
+
+            i {
+                font-size: 1.1em;
+            }
+
+        </style>
+    </head>
+
+    <body>
+        <header>
+            <h1>Christopher Reid</h1>
+            <h3><i>software</i> development & design</h3>
+        </header>
+
+        <article>
+            <h2 class="link" data-link="https://onthisspot.ca" style="color:var(--blue)">On This Spot</h2>
+            <h3>CTO, Developer, Architect</h3>
+            <h4>App, Web, Data, Ops, Management</h4>
+            <section>
+                <span>On This Spot </span>
+            </section>
+        </article>
+
+        <article>
+            <h2 class="link" data-link="https://casca.com/pages/smartfit" style="color:var(--yellow)">Casca Footwear</h2>
+            <h3>Developer & Architect</h3>
+            <h4>App, Data, Ops</h4>
+            <section>
+                <span>Built it out </span>
+            </section>
+        </article>
+
+        <article>
+            <h2 class="link" data-link="https://ceo.ca" style="color:var(--red)">CEO.ca</h2>
+            <h3>Developer</h3>
+            <h4>Web, App, Data, Ops</h4>
+            <section>
+                
+                <span>Hi, I'm Chris. </span>
+            </section>
+        </article>
+
+        <script type="text/javascript">
+            const h2s = document.querySelectorAll('h2');
+            h2s.forEach(h2=>{
+                h2.onclick = function () {
+                    const link = this.getAttribute('data-link');
+                    window.open(link, "_blank");
+                }
+            });
+        </script>
+    </body>
+</html>
