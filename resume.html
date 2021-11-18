@@ -16,6 +16,25 @@
                 --blue: rgb(1, 94, 170);
                 --yellow: rgb(211, 137, 0);
                 --red: rgb(165, 0, 0);
+                --text-color: black;
+                --background-color: white;
+            }
+
+            input[type="checkbox"] {
+                display: none;
+            }
+
+            label {
+                cursor: pointer;
+            }
+
+            label::before {
+                content: "☀️";
+                font-size: 1.5em;
+            }
+
+            input[type="checkbox"]:checked + label::before {
+                content: '🌙';
             }
 
             h1,h2,h3,h4,h5 {
@@ -39,6 +58,13 @@
             body {
                 margin-top: 10%;
                 margin-left: 5%;
+                background-color: var(--background-color);
+                color: var(--text-color);
+            }
+
+            body.dark {
+                background-color: rgb(10, 10, 10);
+                color: white;
             }
 
             article {
@@ -65,14 +91,39 @@
                 color: rgb(56, 51, 36);
             }
 
+            body.dark > header >  h3,
+            body.dark > article > h3 {
+                color: rgb(155, 155, 155);
+            }
+
+            body.dark > header >  h4,
+            body.dark > article > h4 {
+                color: rgb(221, 221, 221);
+            }
+
+
             i {
                 font-size: 1.1em;
             }
+            
+            #darkmode-selector {
+                position: absolute;
+                top: 20px;
+                left: 20px;
+            }
+
+
 
         </style>
     </head>
 
     <body>
+
+        <div id="darkmode-selector">
+            <input id="darkmode" type="checkbox"></input>
+            <label for="darkmode"></label>
+        </div>
+
         <header>
             <h1>Christopher Reid</h1>
             <h3><i>software</i> development & design</h3>
@@ -114,6 +165,21 @@
                     window.open(link, "_blank");
                 }
             });
+
+            const darkmode_checkbox = document.querySelector('input[type="checkbox"]')
+
+            if (darkmode_checkbox.checked) {
+                document.body.classList.add('dark');
+            }
+
+            darkmode_checkbox.onchange = function() {
+                const { checked } = this;
+                if (checked) {
+                    document.body.classList.add('dark');
+                } else {
+                    document.body.classList.remove('dark');
+                }
+            }
         </script>
     </body>
 </html>
