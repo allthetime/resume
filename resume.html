@@ -2,6 +2,8 @@
 
     <head>
 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
         <!-- style sheet -->
 
         <style>
@@ -29,12 +31,12 @@
             }
 
             label::before {
-                content: "☀️";
                 font-size: 1.5em;
+                content: '🌙';
             }
 
             input[type="checkbox"]:checked + label::before {
-                content: '🌙';
+                content: "☀️";
             }
 
             h1,h2,h3,h4,h5 {
@@ -60,6 +62,7 @@
                 margin-left: 5%;
                 background-color: var(--background-color);
                 color: var(--text-color);
+                margin-bottom: 10%;
             }
 
             body.dark {
@@ -107,9 +110,8 @@
             }
             
             #darkmode-selector {
-                position: absolute;
-                top: 20px;
-                left: 20px;
+                position: relative;
+                margin-bottom: 2em;
             }
 
 
@@ -168,13 +170,13 @@
 
             const darkmode_checkbox = document.querySelector('input[type="checkbox"]')
 
-            if (darkmode_checkbox.checked) {
+            if (!darkmode_checkbox.checked) {
                 document.body.classList.add('dark');
             }
 
             darkmode_checkbox.onchange = function() {
                 const { checked } = this;
-                if (checked) {
+                if (!checked) {
                     document.body.classList.add('dark');
                 } else {
                     document.body.classList.remove('dark');
