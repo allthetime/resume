@@ -19,7 +19,7 @@
                 --yellow: rgb(211, 137, 0);
                 --red: rgb(165, 0, 0);
                 --text-color: black;
-                --background-color: white;
+                --background-color: rgb(255, 255, 255);
             }
 
             input[type="checkbox"] {
@@ -31,7 +31,7 @@
             }
 
             label::before {
-                font-size: 1.5em;
+                font-size: 2em;
                 content: '🌙';
             }
 
@@ -41,6 +41,15 @@
 
             h1,h2,h3,h4,h5 {
                 font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+                transition: 0.5s;
+            }
+
+            h3 {
+                margin-top: 0.2em;
+            }
+
+            h4 {
+                margin-top: 0.333em;
             }
 
             .link {
@@ -60,9 +69,11 @@
             body {
                 margin-top: 10%;
                 margin-left: 5%;
+                margin-right: 5%;
                 background-color: var(--background-color);
                 color: var(--text-color);
                 margin-bottom: 10%;
+                transition: background-color 0.5s, color 0.75s;
             }
 
             body.dark {
@@ -72,10 +83,13 @@
 
             article {
                 margin-top: 3em;
+                font-size: 1.1em;
             }
 
             section {
                 margin-top: 1.5em;
+                display: flex;
+                flex-direction: column;
             }
 
             a {
@@ -114,7 +128,48 @@
                 margin-bottom: 2em;
             }
 
+            canvas {
+                position: fixed;
+                top: 0; bottom: 0; left: 0; right: 0;
+                pointer-events: none;
+            }
 
+            .skill-container {
+                border-radius: 1em;
+                background-color: rgba(0,0,0,0.1);
+                display: flex;
+                align-self: flex-start;
+                padding: 0.5em;
+                flex-wrap: wrap;
+                margin-top: 1em;
+            }
+
+            body.dark > section > .skill-container {
+                background-color: rgba(54, 54, 54, 0.856);
+                transition: 0.5s;
+            }
+
+            .skill-pill {
+                border-radius: 0.5em;
+                background-color: white;
+                margin: 0.25em;
+                padding: 0.5em;
+                font-family: 'Courier New', Courier, monospace; 
+                color: black;
+                font-weight: bold;
+                border-right: 2px solid rgb(100, 0, 0);
+                /* border-bottom: 1px solid red; */
+            }
+
+            body.dark > section > .skill-container > .skill-pill {
+                border-right: 2px solid rgb(255, 0, 0);
+                transition: 0.5s;
+            }
+
+            .invisible {
+                opacity: 0;
+                transition: 1s;
+            }
 
         </style>
     </head>
@@ -131,13 +186,24 @@
             <h3><i>software</i> development & design</h3>
         </header>
 
+        <section>
+            <div class="skill-container">
+                <span class="skill-pill"><i>react</i>-native</span>
+                <span class="skill-pill">node</span>
+                <span class="skill-pill">linux</span>
+                <span class="skill-pill">aws</span>
+                <span class="skill-pill">postgresql</span>
+                <span class="skill-pill">redis</span>
+                <span class="skill-pill">zmq</span>
+                <span class="skill-pill">web3</span>
+                <span class="skill-pill">interaction-design</span>
+            </div>
+        </section>
+
         <article>
             <h2 class="link" data-link="https://onthisspot.ca" style="color:var(--blue)">On This Spot</h2>
             <h3>CTO, Developer, Architect</h3>
             <h4>App, Web, Data, Ops, Management</h4>
-            <section>
-                <span>On This Spot </span>
-            </section>
         </article>
 
         <article>
@@ -158,8 +224,15 @@
                 <span>Hi, I'm Chris. </span>
             </section>
         </article>
-
+        
+        <canvas></canvas>
+        
         <script type="text/javascript">
+
+            //
+            // Make Links
+            //
+
             const h2s = document.querySelectorAll('h2');
             h2s.forEach(h2=>{
                 h2.onclick = function () {
@@ -168,20 +241,31 @@
                 }
             });
 
+            //
+            // Darkmode Stuff
+            //
+
             const darkmode_checkbox = document.querySelector('input[type="checkbox"]')
+            const canvas = document.querySelector('canvas');
 
             if (!darkmode_checkbox.checked) {
                 document.body.classList.add('dark');
+            } else {
+                canvas.classList.add('invisible');
             }
 
             darkmode_checkbox.onchange = function() {
                 const { checked } = this;
                 if (!checked) {
                     document.body.classList.add('dark');
+                    canvas.classList.remove('invisible');
                 } else {
                     document.body.classList.remove('dark');
+                    canvas.classList.add('invisible');
                 }
             }
         </script>
+
+        <script type="text/javascript" src="starscape.js"></script>
     </body>
 </html>
