@@ -90,6 +90,9 @@ const swapElements = function (nodeA, nodeB) {
 
 let SWAP_ELEMENT;
 
+const activeIntersections = {
+
+}
 
 function drawCurrentElem() {
 
@@ -112,20 +115,25 @@ function drawCurrentElem() {
 
             if (pill.innerText == CURRENT_ELEM.elem.innerText) return undefined;
             
+            activeIntersections[pill.innerText] = false;
+
             if(target.top + target.height > elem.top
                 && target.left + target.width > elem.left
                 && target.bottom - target.height < elem.bottom
                 && target.right - target.width < elem.right) 
             {
+                activeIntersections[pill.innerText] = true;
+
                 if (!SWAP_ELEMENT) {
                     SWAP_ELEMENT = pill;
                     // xDiff = target.x - elem.x;
                     // swapElements(CURRENT_ELEM.elem, pill);
                     swapElements(ORIGINAL_ELEM, pill);
                 }
+                // if (SWAP_ELEMENT && pill != SWAP_ELEMENT && !activeIntersections[SWAP_ELEMENT.innerText]) {
                 // if (SWAP_ELEMENT && pill != SWAP_ELEMENT) {
                 //     SWAP_ELEMENT = pill;
-                //     swapElements(pill, CURRENT_ELEM.elem);
+                //     swapElements(pill, ORIGINAL_ELEM);
                 // }
             }
         });
@@ -202,16 +210,12 @@ class Draggable {
         if (SWAP_ELEMENT) {
             const SWAP_BOUNDING = SWAP_ELEMENT.getBoundingClientRect();
             const GET_BACK_TO = ORIGINAL_ELEM.getBoundingClientRect();
-            console.log(GET_BACK_TO)
             const right = GET_BACK_TO.right - SWAP_BOUNDING.right;
             const left = GET_BACK_TO.left - SWAP_BOUNDING.left;
-            console.log('r',right);
-            console.log('l',left);
-            const xD = right < 0 ? right : left;
             const top = GET_BACK_TO.top - SWAP_BOUNDING.top;
             const bottom = GET_BACK_TO.bottom - SWAP_BOUNDING.bottom;
+            const xD = right < 0 ? right : left;
             const yD = bottom < 0 ? bottom : top;
-            console.log(yD);
             CURRENT_ELEM.elem.style.transform = `translate(${xD}px,${yD}px)`
         } else {
             CURRENT_ELEM.elem.style.transform = `translate(0,0)`

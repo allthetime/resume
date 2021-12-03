@@ -207,9 +207,10 @@
             }
 
             .body-text {
-                width: clamp(300px,75%,600px);
+                /* width: clamp(300px,75%,600px); */
                 margin-top: 3em;
                 margin-bottom: 1em;
+                margin-right: 1em;
             }
 
             .body-text p {
