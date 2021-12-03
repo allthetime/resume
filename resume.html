@@ -2,179 +2,15 @@
 
     <head>
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title>Christopher Reid</title>
+        <link rel="stylesheet" href="styles.css"/>
 
-        <!-- style sheet -->
-
-        <style>
-
-
-            * { 
-                box-sizing: border-box;
-                margin: 0;
-            }
-
-            :root {
-                --blue: rgb(1, 94, 170);
-                --yellow: rgb(211, 137, 0);
-                --red: rgb(165, 0, 0);
-                --text-color: black;
-                --background-color: rgb(255, 255, 255);
-            }
-
-            input[type="checkbox"] {
-                display: none;
-            }
-
-            label {
-                cursor: pointer;
-            }
-
-            label::before {
-                font-size: 2em;
-                content: '🌙';
-            }
-
-            input[type="checkbox"]:checked + label::before {
-                content: "☀️";
-            }
-
-            h1,h2,h3,h4,h5 {
-                font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-                transition: 0.5s;
-            }
-
-            h3 {
-                margin-top: 0.2em;
-            }
-
-            h4 {
-                margin-top: 0.333em;
-            }
-
-            .link {
-                cursor: pointer;
-            }
-
-            .link::before {
-                content: '∞ ';
-            }
-
-            span {
-                margin-top: 10px;
-                font-family: Georgia, 'Times New Roman', Times, serif;
-                font-size: 0.9em;
-            }
-
-            body {
-                margin-top: 10%;
-                margin-left: 5%;
-                margin-right: 5%;
-                background-color: var(--background-color);
-                color: var(--text-color);
-                margin-bottom: 10%;
-                transition: background-color 0.5s, color 0.75s;
-            }
-
-            body.dark {
-                background-color: rgb(10, 10, 10);
-                color: white;
-            }
-
-            article {
-                margin-top: 3em;
-                font-size: 1.1em;
-            }
-
-            section {
-                margin-top: 1.5em;
-                display: flex;
-                flex-direction: column;
-            }
-
-            a {
-                float: left;
-            }
-
-            header {
-                font-size: 1.3em;
-            }
-
-            h3 {
-                color: rgb(29, 21, 21);
-            }
-
-            h4 {
-                color: rgb(56, 51, 36);
-            }
-
-            body.dark > header >  h3,
-            body.dark > article > h3 {
-                color: rgb(155, 155, 155);
-            }
-
-            body.dark > header >  h4,
-            body.dark > article > h4 {
-                color: rgb(221, 221, 221);
-            }
-
-
-            i {
-                font-size: 1.1em;
-            }
-            
-            #darkmode-selector {
-                position: relative;
-                margin-bottom: 2em;
-            }
-
-            canvas {
-                position: fixed;
-                top: 0; bottom: 0; left: 0; right: 0;
-                pointer-events: none;
-            }
-
-            .skill-container {
-                border-radius: 1em;
-                background-color: rgba(0,0,0,0.1);
-                display: flex;
-                align-self: flex-start;
-                padding: 0.5em;
-                flex-wrap: wrap;
-                margin-top: 1em;
-            }
-
-            body.dark > section > .skill-container {
-                background-color: rgba(54, 54, 54, 0.856);
-                transition: 0.5s;
-            }
-
-            .skill-pill {
-                border-radius: 0.5em;
-                background-color: white;
-                margin: 0.25em;
-                padding: 0.5em;
-                font-family: 'Courier New', Courier, monospace; 
-                color: black;
-                font-weight: bold;
-                border-right: 2px solid rgb(100, 0, 0);
-                /* border-bottom: 1px solid red; */
-            }
-
-            body.dark > section > .skill-container > .skill-pill {
-                border-right: 2px solid rgb(255, 0, 0);
-                transition: 0.5s;
-            }
-
-            .invisible {
-                opacity: 0;
-                transition: 1s;
-            }
-
-        </style>
     </head>
 
     <body>
+
+        <canvas></canvas>
 
         <div id="darkmode-selector">
             <input id="darkmode" type="checkbox"></input>
@@ -187,23 +23,20 @@
         </header>
 
         <section>
-            <div class="skill-container">
-                <span class="skill-pill"><i>react</i>-native</span>
-                <span class="skill-pill">node</span>
-                <span class="skill-pill">linux</span>
-                <span class="skill-pill">aws</span>
-                <span class="skill-pill">postgresql</span>
-                <span class="skill-pill">redis</span>
-                <span class="skill-pill">zmq</span>
-                <span class="skill-pill">web3</span>
-                <span class="skill-pill">interaction-design</span>
-            </div>
+            <div class="skill-container" data-skills="react-native, css, linux, postgresql, redis, aws, zmq, web3, interaction-design"></div>
         </section>
 
         <article>
             <h2 class="link" data-link="https://onthisspot.ca" style="color:var(--blue)">On This Spot</h2>
             <h3>CTO, Developer, Architect</h3>
             <h4>App, Web, Data, Ops, Management</h4>
+            <section class="body-text">
+                <p>On This Spot is a historical education and walking tour app based on the exact location of old photos. Users can visit these spots and compare and contrast the past and the present through interactive photography and high quality written history.</p>
+                <p>The android and ios apps are made with react-native and make heavy use of the mapbox library. Custom GLSL is used to create an image editor that allows users to make their own then & now photos.</p>
+                <p>The website is a mixure of react components and server-rendered templates that is currently being re-written in nextjs to close the static/dynamic divide.</p>
+                <p>The backend includes a collection of node-express apis, a postgres database, and a small image resizing and caching service written in rust.</p>
+                <p>All code written by me and co-op students under my mentorship and direction.</p>
+            </section>
         </article>
 
         <article>
@@ -224,10 +57,18 @@
                 <span>Hi, I'm Chris. </span>
             </section>
         </article>
-        
-        <canvas></canvas>
+    
         
         <script type="text/javascript">
+
+            //
+            // Render Skills
+            //
+
+            const skill_container = document.querySelector('.skill-container');
+            const skills = skill_container.getAttribute('data-skills').replace(/\s/g,'').split(',')
+            const skills_html = skills.map(skill=>`<span class="skill-pill">${skill}</span>`).join('');
+            skill_container.innerHTML = skill_container.innerHTML + skills_html;
 
             //
             // Make Links
@@ -246,7 +87,7 @@
             //
 
             const darkmode_checkbox = document.querySelector('input[type="checkbox"]')
-            const canvas = document.querySelector('canvas');
+            let canvas = document.querySelector('canvas');
 
             if (!darkmode_checkbox.checked) {
                 document.body.classList.add('dark');
@@ -267,5 +108,6 @@
         </script>
 
         <script type="text/javascript" src="starscape.js"></script>
+        <script type="text/javascript" src="grab.js"></script>
     </body>
 </html>

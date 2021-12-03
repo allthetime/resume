@@ -1,13 +1,13 @@
 // canvas setup
-// const canvas = document.querySelector('canvas');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-const ctx = canvas.getContext('2d');
+const _canvas = document.querySelector('canvas');
+_canvas.width = window.innerWidth;
+_canvas.height = window.innerHeight;
+const ctx = _canvas.getContext('2d');
 
 // watch for browser resizing, reinitialize stars
 window.addEventListener('resize', function() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  _canvas.width = window.innerWidth;
+  _canvas.height = window.innerHeight;
   init();
 });
 
