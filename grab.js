@@ -242,13 +242,13 @@ class Draggable {
             }
 
             // if (directons.up) {
-            //     console.log('up')
             //     if (TARGET_IS_SMALL) {
-            //         console.log('SMALL!')
-
+            //         if (directons.right) {
+            //             xD = right;
+            //             alert('YEAH')
+            //         }
             //     } else {
-            //         // if (xD == left) xD = right;
-            //         if (xD == right) xD = left;
+
             //     }
             // }
 
