@@ -177,8 +177,12 @@
 
             .skill-pill:hover {
                 /* transition: all 0.05s cubic-bezier(0.075, 0.82, 0.165, 1); */
-                transform: scale(1.2);
+                /* transform: scale(1.2); */
                 cursor:pointer;
+            }
+
+            .skill-pill:active {
+                cursor: grab;
             }
 
             /* .skill-pill::before {
@@ -217,4 +221,10 @@
                 transform: translate(0,0) !important;
                 transition: 0.3s;
                 transition-timing-function: ease-out;
+            }
+
+            #nasty {
+                position: fixed;
+                z-index: 1000;
+                background-color: red;
             }
