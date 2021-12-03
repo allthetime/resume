@@ -207,6 +207,8 @@ class Draggable {
 
         CURRENT_ELEM.elem.classList.add('reset');
 
+
+
         if (SWAP_ELEMENT) {
             const SWAP_BOUNDING = SWAP_ELEMENT.getBoundingClientRect();
             const GET_BACK_TO = ORIGINAL_ELEM.getBoundingClientRect();
@@ -214,8 +216,46 @@ class Draggable {
             const left = GET_BACK_TO.left - SWAP_BOUNDING.left;
             const top = GET_BACK_TO.top - SWAP_BOUNDING.top;
             const bottom = GET_BACK_TO.bottom - SWAP_BOUNDING.bottom;
-            const xD = right < 0 ? right : left;
-            const yD = bottom < 0 ? bottom : top;
+
+            const directons = {
+                right: right > 0,
+                left: right < 0,
+                up: bottom < 0,
+                down: bottom > 0,
+            }
+        
+
+            let xD;
+            // let yD;
+
+            const TARGET_IS_SMALL = GET_BACK_TO.width < SWAP_BOUNDING.width;
+
+            if (directons.right) {
+                xD = left;
+                // if (directons.down) xD = right;
+            } 
+            
+            if (directons.left) {
+                xD = right;
+                if (directons.down) xD = left;
+                // if (directons.up) xD = left;
+            }
+
+            // if (directons.up) {
+            //     console.log('up')
+            //     if (TARGET_IS_SMALL) {
+            //         console.log('SMALL!')
+
+            //     } else {
+            //         // if (xD == left) xD = right;
+            //         if (xD == right) xD = left;
+            //     }
+            // }
+
+            // const xD = (right < 0) ? right : left;
+            let yD = bottom < 0 ? bottom : top;
+
+
             CURRENT_ELEM.elem.style.transform = `translate(${xD}px,${yD}px)`
         } else {
             CURRENT_ELEM.elem.style.transform = `translate(0,0)`
