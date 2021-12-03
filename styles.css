@@ -218,8 +218,8 @@
             }
 
             .reset {
-                transform: translate(0,0) !important;
-                transition: 0.3s;
+                transform: translate(0,0);
+                transition: 0.1s;
                 transition-timing-function: ease-out;
             }
 

@@ -22,7 +22,6 @@ document.onmouseup = () => {
     if (PRESSING && CURRENT_ELEM) {
         PRESSING = false;
         CURRENT_ELEM.reset();
-        SWAP_ELEMENT = null;
         xDiff = 0;
     }
 }
@@ -103,6 +102,7 @@ function drawCurrentElem() {
         // console.log(xDiff);
 
         // if (xDiff) d[0] = d[0] - xDiff;
+
         CURRENT_ELEM.elem.style.transform = `translate(${d[0]}px,${d[1]}px)`
 
         Array.from(pills).forEach(pill=>{
@@ -174,28 +174,59 @@ class Draggable {
         this.state.start_point = [x, y];
         GLOBALx = x;
         GLOBALy = y;
+
+
+        const MAGIC = 4;
+
         this.elem.classList.remove('reset');
         const parent = this.elem.parentNode;
         const clone = this.elem.cloneNode(true);
         const b = this.elem.getBoundingClientRect();
         clone.style.position = 'fixed';
-        clone.style.top = b.top;
-        clone.style.left = b.left;
+        clone.style.top = b.top - MAGIC;
+        clone.style.left = b.left - MAGIC;
         this.elem.style.opacity = 0;
         parent.appendChild(clone);
         ORIGINAL_ELEM = this.elem;
+                SWAP_ELEMENT = null;
         CURRENT_ELEM.elem = clone;
     }
 
+
     reset = () => {
         this.state.mousedown = false;
-        CURRENT_ELEM.elem.style.opacity = 0.1;
-        CURRENT_ELEM.elem.parentNode.removeChild(CURRENT_ELEM.elem)
-        ORIGINAL_ELEM.classList.add('reset');
-        ORIGINAL_ELEM.style.opacity = 1;
-        this.elem = ORIGINAL_ELEM;
-        CURRENT_ELEM = null;
-        ORIGINAL_ELEM = null;
+        // CURRENT_ELEM.elem.style.opacity = 0;
+
+        CURRENT_ELEM.elem.classList.add('reset');
+
+        if (SWAP_ELEMENT) {
+            const SWAP_BOUNDING = SWAP_ELEMENT.getBoundingClientRect();
+            const GET_BACK_TO = ORIGINAL_ELEM.getBoundingClientRect();
+            console.log(GET_BACK_TO)
+            const right = GET_BACK_TO.right - SWAP_BOUNDING.right;
+            const left = GET_BACK_TO.left - SWAP_BOUNDING.left;
+            console.log('r',right);
+            console.log('l',left);
+            const xD = right < 0 ? right : left;
+            const top = GET_BACK_TO.top - SWAP_BOUNDING.top;
+            const bottom = GET_BACK_TO.bottom - SWAP_BOUNDING.bottom;
+            const yD = bottom < 0 ? bottom : top;
+            console.log(yD);
+            CURRENT_ELEM.elem.style.transform = `translate(${xD}px,${yD}px)`
+        } else {
+            CURRENT_ELEM.elem.style.transform = `translate(0,0)`
+        }
+
+        CURRENT_ELEM.elem.ontransitionend = ()=>{
+            CURRENT_ELEM.elem.parentNode.removeChild(CURRENT_ELEM.elem)
+            // ORIGINAL_ELEM.classList.add('reset');
+            ORIGINAL_ELEM.style.opacity = 1;
+            this.elem = ORIGINAL_ELEM;
+            CURRENT_ELEM = null;
+            ORIGINAL_ELEM = null;
+            SWAP_ELEMENT = null;
+        }
+
     }
 
     attachListeners() {
