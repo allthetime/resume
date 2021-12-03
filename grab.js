@@ -238,19 +238,7 @@ class Draggable {
             if (directons.left) {
                 xD = right;
                 if (directons.down) xD = left;
-                // if (directons.up) xD = left;
             }
-
-            // if (directons.up) {
-            //     if (TARGET_IS_SMALL) {
-            //         if (directons.right) {
-            //             xD = right;
-            //             alert('YEAH')
-            //         }
-            //     } else {
-
-            //     }
-            // }
 
             // const xD = (right < 0) ? right : left;
             let yD = bottom < 0 ? bottom : top;
