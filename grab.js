@@ -189,10 +189,13 @@ class Draggable {
 
     reset = () => {
         this.state.mousedown = false;
-        CURRENT_ELEM.elem.style.opacity = 0;
+        CURRENT_ELEM.elem.style.opacity = 0.1;
+        CURRENT_ELEM.elem.parentNode.removeChild(CURRENT_ELEM.elem)
         ORIGINAL_ELEM.classList.add('reset');
         ORIGINAL_ELEM.style.opacity = 1;
+        this.elem = ORIGINAL_ELEM;
         CURRENT_ELEM = null;
+        ORIGINAL_ELEM = null;
     }
 
     attachListeners() {
