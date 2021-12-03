@@ -5,6 +5,7 @@ let PRESSING = false;
 let GLOBALx = 0;
 let GLOBALy = 0;
 let CURRENT_ELEM = null;
+let ORIGINAL_ELEM = null;
 let CURRENT_START = null;
 let ANIMATION;
 let ANIMATION_COUNT = 0;
@@ -99,9 +100,9 @@ function drawCurrentElem() {
             1 - (CURRENT_ELEM.state.start_point[1] - GLOBALy),
         ];
 
-        console.log(xDiff);
+        // console.log(xDiff);
 
-        if (xDiff) d[0] = d[0] - xDiff;
+        // if (xDiff) d[0] = d[0] - xDiff;
         CURRENT_ELEM.elem.style.transform = `translate(${d[0]}px,${d[1]}px)`
 
         Array.from(pills).forEach(pill=>{
@@ -118,8 +119,9 @@ function drawCurrentElem() {
             {
                 if (!SWAP_ELEMENT) {
                     SWAP_ELEMENT = pill;
-                    xDiff = target.x - elem.x;
-                    swapElements(CURRENT_ELEM.elem, pill);
+                    // xDiff = target.x - elem.x;
+                    // swapElements(CURRENT_ELEM.elem, pill);
+                    swapElements(ORIGINAL_ELEM, pill);
                 }
                 // if (SWAP_ELEMENT && pill != SWAP_ELEMENT) {
                 //     SWAP_ELEMENT = pill;
@@ -166,18 +168,30 @@ class Draggable {
 
     mousedown = (e) => {
         CURRENT_ELEM = this;
-        this.elem.style.transform = `translate(0,0)`;
+        // this.elem.style.transform = `translate(0,0)`;
         this.state.mousedown = true;
         const { pageX: x, pageY: y } = e;
         this.state.start_point = [x, y];
         GLOBALx = x;
         GLOBALy = y;
         this.elem.classList.remove('reset');
+        const parent = this.elem.parentNode;
+        const clone = this.elem.cloneNode(true);
+        const b = this.elem.getBoundingClientRect();
+        clone.style.position = 'fixed';
+        clone.style.top = b.top;
+        clone.style.left = b.left;
+        this.elem.style.opacity = 0;
+        parent.appendChild(clone);
+        ORIGINAL_ELEM = this.elem;
+        CURRENT_ELEM.elem = clone;
     }
 
     reset = () => {
         this.state.mousedown = false;
-        this.elem.classList.add('reset');
+        CURRENT_ELEM.elem.style.opacity = 0;
+        ORIGINAL_ELEM.classList.add('reset');
+        ORIGINAL_ELEM.style.opacity = 1;
         CURRENT_ELEM = null;
     }
 
