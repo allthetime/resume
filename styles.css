@@ -90,6 +90,64 @@
 
             header {
                 font-size: 1.3em;
+                margin-bottom: 2em;
+            }
+
+            /* Contact Links */
+            .contact-links {
+                display: flex;
+                flex-direction: column;
+                gap: 0.05em;
+                margin-top: 2em;
+                margin-bottom: 2em;
+            }
+
+            .contact-link {
+                display: flex;
+                align-items: center;
+                gap: 0.5em;
+                text-decoration: none;
+                color: var(--text-color);
+                font-family: 'Courier New', Courier, monospace;
+                font-size: 0.8em;
+                transition: opacity 0.3s ease;
+            }
+
+            .contact-link:hover {
+                opacity: 0.7;
+            }
+
+            .contact-icon {
+                font-size: 1.1em;
+            }
+
+            /* Dark mode contact links */
+            body.dark .contact-links {
+                /* background-color: rgba(54, 54, 54, 0.856); */
+            }
+
+            body.dark .contact-link {
+                color: rgb(200, 200, 200);
+            }
+
+            /* Personal Blurb */
+            .personal-blurb {
+                margin-top: 2em;
+                max-width: 600px;
+            }
+
+            .personal-blurb p {
+                font-family: Georgia, 'Times New Roman', Times, serif;
+                font-size: 0.95em;
+                line-height: 1.5;
+                color: var(--text-color);
+                opacity: 0.9;
+                margin: 0;
+            }
+
+            /* Dark mode adjustments */
+            body.dark .personal-blurb p {
+                color: rgb(200, 200, 200);
             }
 
             h3 {
@@ -216,6 +274,68 @@
             .body-text p {
                 margin-bottom: 1em;
                 font-family: sans-serif;
+            }
+
+            /* Project Features Styling */
+            .project-features {
+                list-style: none;
+                padding: 0;
+                margin: 0 0 2em 0;
+            }
+
+            .project-features li {
+                margin-bottom: 1.2em;
+                padding-left: 1.2em;
+                position: relative;
+                line-height: 1.5;
+                font-family: Georgia, 'Times New Roman', Times, serif;
+                font-size: 0.95em;
+            }
+
+            .project-features li::before {
+                content: '•';
+                position: absolute;
+                left: 0;
+                color: var(--blue);
+                font-weight: bold;
+            }
+
+            /* Media Slots Styling */
+            .media-slots {
+                display: flex;
+                gap: 1em;
+                flex-wrap: wrap;
+                margin-top: 1.5em;
+            }
+
+            .media-slot {
+                width: 120px;
+                height: 80px;
+                background: rgba(0,0,0,0.1);
+                border-radius: 0.3em;
+                border: 1px solid rgba(0,0,0,0.15);
+                position: relative;
+            }
+
+            .media-slot::before {
+                content: '□';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                font-size: 1.2em;
+                opacity: 0.4;
+                color: var(--text-color);
+            }
+
+            /* Dark Mode Styles */
+            body.dark .project-features li::before {
+                color: rgb(100, 150, 220);
+            }
+
+            body.dark .media-slot {
+                background: rgba(255,255,255,0.1);
+                border-color: rgba(255,255,255,0.15);
             }
 
             .reset {
