@@ -1,274 +1,248 @@
 const pills = document.querySelectorAll('.skill-pill');
 
+let isDragging = false;
+let currentDraggable = null;
+let dragClone = null;
+let originalElement = null;
+let startX = 0;
+let startY = 0;
+let currentX = 0;
+let currentY = 0;
+let animationFrame = null;
+let longPressTimer = null;
+let longPressActivated = false;
 
-let PRESSING = false;
-let GLOBALx = 0;
-let GLOBALy = 0;
-let CURRENT_ELEM = null;
-let ORIGINAL_ELEM = null;
-let CURRENT_START = null;
-let ANIMATION;
-let ANIMATION_COUNT = 0;
-let xDiff;
+// Mouse events
+document.addEventListener('mousedown', startDrag);
+document.addEventListener('mouseup', endDrag);
+document.addEventListener('mousemove', onDrag);
 
-document.onmousedown = () => {
-    animateDraggable();
-    PRESSING = true;
-}
+// Touch events
+document.addEventListener('touchstart', startDrag, { passive: false });
+document.addEventListener('touchend', endDrag);
+document.addEventListener('touchmove', onDrag, { passive: false });
 
-document.onmouseup = () => {
-    cancelAnimationFrame(ANIMATION);
-    ANIMATION_COUNT += 1;
-    if (PRESSING && CURRENT_ELEM) {
-        PRESSING = false;
-        CURRENT_ELEM.reset();
-        xDiff = 0;
+function startDrag() {
+    if (currentDraggable && (isDragging || longPressActivated)) {
+        animationFrame = requestAnimationFrame(updateDragPosition);
     }
 }
 
-document.onmousemove = (e) => {
-    if (PRESSING && CURRENT_ELEM && CURRENT_ELEM.state.start_point) {
-        const { pageX: x, pageY: y } = e;
-        GLOBALx = x;
-        GLOBALy = y;
+function endDrag() {
+    // Clear long press timer if still waiting
+    if (longPressTimer) {
+        clearTimeout(longPressTimer);
+        longPressTimer = null;
+    }
+    
+    longPressActivated = false;
+    
+    if (animationFrame) {
+        cancelAnimationFrame(animationFrame);
+        animationFrame = null;
+    }
+    
+    if (isDragging && dragClone) {
+        resetDraggedElement();
     }
 }
 
-function animateDraggable() {
-    drawCurrentElem();
-    ANIMATION = requestAnimationFrame(animateDraggable);
+function onDrag(e) {
+    if (isDragging) {
+        // Handle both mouse and touch events
+        const touch = e.touches ? e.touches[0] : e;
+        currentX = touch.pageX;
+        currentY = touch.pageY;
+        
+        // Prevent scrolling on mobile when dragging
+        if (e.touches) {
+            e.preventDefault();
+        }
+    }
 }
 
-// function swapElements(obj1, obj2) {
-//     // create marker element and insert it where obj1 is
-//     var temp = document.createElement("div");
-//     obj1.parentNode.insertBefore(temp, obj1);
-//     // move obj1 to right before obj2
-//     obj2.parentNode.insertBefore(obj1, obj2);
-//     // move obj2 to right before where obj1 used to be
-//     temp.parentNode.insertBefore(obj2, temp);
-//     // remove temporary marker node
-//     temp.parentNode.removeChild(temp);
-//     SWAP_ELEMENT = null;
-// }
-const swapElements = function (nodeA, nodeB) {
-    // SWAP_ELEMENT = null;
-    const parentA = nodeA.parentNode;
-    const siblingA = nodeA.nextSibling === nodeB ? nodeA : nodeA.nextSibling;
-
-    // Move `nodeA` to before the `nodeB`
-    nodeB.parentNode.insertBefore(nodeA, nodeB);
-
-    // Move `nodeB` to before the sibling of `nodeA`
-    parentA.insertBefore(nodeB, siblingA);
-};
-
-// function swapElements(obj1, obj2) {
-//     // save the location of obj2
-//     var parent2 = obj2.parentNode;
-//     var next2 = obj2.nextSibling;
-//     // special case for obj1 is the next sibling of obj2
-//     if (next2 === obj1) {
-//         // just put obj1 before obj2
-//         parent2.insertBefore(obj1, obj2);
-//     } else {
-//         // insert obj2 right before obj1
-//         obj1.parentNode.insertBefore(obj2, obj1);
-
-//         // now insert obj1 where obj2 was
-//         if (next2) {
-//             // if there was an element after obj2, then insert obj1 right before that
-//             parent2.insertBefore(obj1, next2);
-//         } else {
-//             // otherwise, just append as last child
-//             parent2.appendChild(obj1);
-//         }
-//     }
-//     SWAP_ELEMENT = null;
-// }
-
-
-let SWAP_ELEMENT;
-
-const activeIntersections = {
-
+function updateDragPosition() {
+    if (dragClone && isDragging) {
+        const deltaX = currentX - startX;
+        const deltaY = currentY - startY;
+        
+        dragClone.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+        
+        checkIntersections();
+    }
+    
+    if (isDragging) {
+        animationFrame = requestAnimationFrame(updateDragPosition);
+    }
 }
 
-function drawCurrentElem() {
-
-    if (CURRENT_ELEM && GLOBALx && GLOBALy) {
-        const d = [
-            1 - (CURRENT_ELEM.state.start_point[0] - GLOBALx),
-            1 - (CURRENT_ELEM.state.start_point[1] - GLOBALy),
-        ];
-
-        // console.log(xDiff);
-
-        // if (xDiff) d[0] = d[0] - xDiff;
-
-        CURRENT_ELEM.elem.style.transform = `translate(${d[0]}px,${d[1]}px)`
-
-        Array.from(pills).forEach(pill=>{
-
-            let target = pill.getBoundingClientRect();
-            let elem = CURRENT_ELEM.elem.getBoundingClientRect();
-
-            if (pill.innerText == CURRENT_ELEM.elem.innerText) return undefined;
+function checkIntersections() {
+    const dragRect = dragClone.getBoundingClientRect();
+    let closestPill = null;
+    let closestDistance = Infinity;
+    
+    pills.forEach(pill => {
+        if (pill === originalElement) return;
+        
+        const pillRect = pill.getBoundingClientRect();
+        
+        // Check if dragged element overlaps with this pill
+        if (isOverlapping(dragRect, pillRect)) {
+            // Calculate center-to-center distance
+            const distance = getDistance(dragRect, pillRect);
             
-            activeIntersections[pill.innerText] = false;
-
-            if(target.top + target.height > elem.top
-                && target.left + target.width > elem.left
-                && target.bottom - target.height < elem.bottom
-                && target.right - target.width < elem.right) 
-            {
-                activeIntersections[pill.innerText] = true;
-
-                if (!SWAP_ELEMENT) {
-                    SWAP_ELEMENT = pill;
-                    // xDiff = target.x - elem.x;
-                    // swapElements(CURRENT_ELEM.elem, pill);
-                    swapElements(ORIGINAL_ELEM, pill);
-                }
-                // if (SWAP_ELEMENT && pill != SWAP_ELEMENT && !activeIntersections[SWAP_ELEMENT.innerText]) {
-                // if (SWAP_ELEMENT && pill != SWAP_ELEMENT) {
-                //     SWAP_ELEMENT = pill;
-                //     swapElements(pill, ORIGINAL_ELEM);
-                // }
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                closestPill = pill;
             }
-        });
+        }
+    });
+    
+    // Swap with the closest overlapping pill
+    if (closestPill && closestPill !== originalElement.nextSibling && closestPill !== originalElement.previousSibling) {
+        swapElements(originalElement, closestPill);
     }
-
 }
 
-// animateDraggable();
-const boundaries = {};
+function isOverlapping(rect1, rect2) {
+    return !(rect1.right < rect2.left || 
+             rect1.left > rect2.right || 
+             rect1.bottom < rect2.top || 
+             rect1.top > rect2.bottom);
+}
+
+function getDistance(rect1, rect2) {
+    const center1X = rect1.left + rect1.width / 2;
+    const center1Y = rect1.top + rect1.height / 2;
+    const center2X = rect2.left + rect2.width / 2;
+    const center2Y = rect2.top + rect2.height / 2;
+    
+    return Math.sqrt(Math.pow(center2X - center1X, 2) + Math.pow(center2Y - center1Y, 2));
+}
+
+function swapElements(elem1, elem2) {
+    const parent = elem1.parentNode;
+    const next = elem1.nextSibling;
+    
+    if (next === elem2) {
+        parent.insertBefore(elem2, elem1);
+    } else {
+        parent.insertBefore(elem1, elem2);
+        if (next) {
+            parent.insertBefore(elem2, next);
+        } else {
+            parent.appendChild(elem2);
+        }
+    }
+}
+
+function resetDraggedElement() {
+    if (!dragClone || !originalElement) return;
+    
+    // Get final position to animate to
+    const targetRect = originalElement.getBoundingClientRect();
+    const cloneRect = dragClone.getBoundingClientRect();
+    
+    const finalX = targetRect.left - cloneRect.left + (currentX - startX);
+    const finalY = targetRect.top - cloneRect.top + (currentY - startY);
+    
+    dragClone.classList.add('reset');
+    dragClone.style.transform = `translate(${finalX}px, ${finalY}px)`;
+    
+    dragClone.addEventListener('transitionend', () => {
+        if (dragClone && dragClone.parentNode) {
+            dragClone.parentNode.removeChild(dragClone);
+        }
+        originalElement.style.opacity = 1;
+        cleanup();
+    }, { once: true });
+}
+
+function cleanup() {
+    isDragging = false;
+    currentDraggable = null;
+    dragClone = null;
+    originalElement = null;
+    startX = 0;
+    startY = 0;
+    currentX = 0;
+    currentY = 0;
+}
 
 class Draggable {
-
-    constructor(element) { 
-        const name = element.innerText;
-        console.log(name);
-        this.state = {
-            mousedown: false,
-            start_point: null,
-        }
+    constructor(element) {
         this.elem = element;
         this.attachListeners();
-        // document.addEventListener('notPressing', () => {
-        //     this.reset();
-        // });
-
-        const bounding = element.getBoundingClientRect();
-
-            // const d = document.createElement('div');
-            // d.style.top = offsetTop + offsetHeight;
-            // d.style.left = offsetLeft;
-            // d.style.height = 10;
-            // d.style.width = 10;
-            // d.id = 'nasty';
-            // document.body.appendChild(d);
-
-
-
-        
     }
 
-    mousedown = (e) => {
-        CURRENT_ELEM = this;
-        // this.elem.style.transform = `translate(0,0)`;
-        this.state.mousedown = true;
-        const { pageX: x, pageY: y } = e;
-        this.state.start_point = [x, y];
-        GLOBALx = x;
-        GLOBALy = y;
-
-
-        const MAGIC = 4;
-
-        this.elem.classList.remove('reset');
-        const parent = this.elem.parentNode;
-        const clone = this.elem.cloneNode(true);
-        const b = this.elem.getBoundingClientRect();
-        clone.style.position = 'fixed';
-        clone.style.top = b.top - MAGIC;
-        clone.style.left = b.left - MAGIC;
-        this.elem.style.opacity = 0;
-        parent.appendChild(clone);
-        ORIGINAL_ELEM = this.elem;
-                SWAP_ELEMENT = null;
-        CURRENT_ELEM.elem = clone;
-    }
-
-
-    reset = () => {
-        this.state.mousedown = false;
-        // CURRENT_ELEM.elem.style.opacity = 0;
-
-        CURRENT_ELEM.elem.classList.add('reset');
-
-
-
-        if (SWAP_ELEMENT) {
-            const SWAP_BOUNDING = SWAP_ELEMENT.getBoundingClientRect();
-            const GET_BACK_TO = ORIGINAL_ELEM.getBoundingClientRect();
-            const right = GET_BACK_TO.right - SWAP_BOUNDING.right;
-            const left = GET_BACK_TO.left - SWAP_BOUNDING.left;
-            const top = GET_BACK_TO.top - SWAP_BOUNDING.top;
-            const bottom = GET_BACK_TO.bottom - SWAP_BOUNDING.bottom;
-
-            const directons = {
-                right: right > 0,
-                left: right < 0,
-                up: bottom < 0,
-                down: bottom > 0,
-            }
+    handleStart = (e) => {
+        const isTouch = e.type === 'touchstart';
         
-
-            let xD;
-            // let yD;
-
-            const TARGET_IS_SMALL = GET_BACK_TO.width < SWAP_BOUNDING.width;
-
-            if (directons.right) {
-                xD = left;
-                // if (directons.down) xD = right;
-            } 
+        if (isTouch) {
+            // For touch, start long press timer
+            const touch = e.touches[0];
+            const startPos = { x: touch.pageX, y: touch.pageY };
             
-            if (directons.left) {
-                xD = right;
-                if (directons.down) xD = left;
-            }
-
-            // const xD = (right < 0) ? right : left;
-            let yD = bottom < 0 ? bottom : top;
-
-
-            CURRENT_ELEM.elem.style.transform = `translate(${xD}px,${yD}px)`
+            longPressTimer = setTimeout(() => {
+                // Check if finger hasn't moved much
+                const currentTouch = e.touches && e.touches[0];
+                if (currentTouch) {
+                    const moved = Math.abs(currentTouch.pageX - startPos.x) + Math.abs(currentTouch.pageY - startPos.y);
+                    if (moved < 10) {
+                        longPressActivated = true;
+                        this.activateDrag(touch.pageX, touch.pageY);
+                        
+                        // Visual/haptic feedback (if supported)
+                        if (navigator.vibrate) {
+                            navigator.vibrate(50);
+                        }
+                    }
+                }
+            }, 500); // 500ms long press
         } else {
-            CURRENT_ELEM.elem.style.transform = `translate(0,0)`
+            // For mouse, activate immediately
+            e.preventDefault();
+            this.activateDrag(e.pageX, e.pageY);
         }
+    }
 
-        CURRENT_ELEM.elem.ontransitionend = ()=>{
-            CURRENT_ELEM.elem.parentNode.removeChild(CURRENT_ELEM.elem)
-            // ORIGINAL_ELEM.classList.add('reset');
-            ORIGINAL_ELEM.style.opacity = 1;
-            this.elem = ORIGINAL_ELEM;
-            CURRENT_ELEM = null;
-            ORIGINAL_ELEM = null;
-            SWAP_ELEMENT = null;
-        }
-
+    activateDrag(pageX, pageY) {
+        currentDraggable = this;
+        isDragging = true;
+        
+        startX = pageX;
+        startY = pageY;
+        currentX = startX;
+        currentY = startY;
+        
+        // Create clone for dragging
+        const rect = this.elem.getBoundingClientRect();
+        const clone = this.elem.cloneNode(true);
+        
+        clone.style.position = 'fixed';
+        clone.style.top = `${rect.top}px`;
+        clone.style.left = `${rect.left}px`;
+        clone.style.width = `${rect.width}px`;
+        clone.style.pointerEvents = 'none';
+        clone.style.zIndex = '1000';
+        clone.classList.remove('reset');
+        clone.classList.add('dragging');
+        
+        document.body.appendChild(clone);
+        
+        // Hide original
+        this.elem.style.opacity = '0.3';
+        
+        originalElement = this.elem;
+        dragClone = clone;
     }
 
     attachListeners() {
-        this.elem.addEventListener('mousedown', this.mousedown, false);
-            // this.elem.addEventListener('mouseup', this.mouseup, false),
-            // this.elem.addEventListener('mouseout', this.mouseup, false),
-            // this.elem.addEventListener('mousemove', this.mousemove, false),
+        this.elem.addEventListener('mousedown', this.handleStart, false);
+        this.elem.addEventListener('touchstart', this.handleStart, { passive: false });
     }
-
 }
 
+// Initialize draggable pills
 Array.from(pills).forEach(pill => new Draggable(pill));
 

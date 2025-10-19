@@ -51,9 +51,9 @@
                 content: '∞ ';
             }
 
-            span {
+            .body-text span {
                 margin-top: 10px;
-                font-family: Georgia, 'Times New Roman', Times, serif;
+                font-family: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Palatino', 'Georgia', serif;
                 font-size: 0.9em;
             }
 
@@ -97,7 +97,7 @@
             .contact-links {
                 display: flex;
                 flex-direction: column;
-                gap: 0.05em;
+                gap: 0.6em;
                 margin-top: 2em;
                 margin-bottom: 2em;
             }
@@ -108,17 +108,23 @@
                 gap: 0.5em;
                 text-decoration: none;
                 color: var(--text-color);
-                font-family: 'Courier New', Courier, monospace;
-                font-size: 0.8em;
                 transition: opacity 0.3s ease;
+            }
+            
+            .contact-link .contact-icon {
+                font-size: 1.5em;
+                line-height: 1;
+            }
+            
+            .contact-link span:not(.contact-icon) {
+                font-family: -apple-system, BlinkMacSystemFont, 'SF Mono', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
+                font-size: 0.8em;
+                margin-top: 0;
+                text-decoration: underline;
             }
 
             .contact-link:hover {
                 opacity: 0.7;
-            }
-
-            .contact-icon {
-                font-size: 1.1em;
             }
 
             /* Dark mode contact links */
@@ -137,7 +143,7 @@
             }
 
             .personal-blurb p {
-                font-family: Georgia, 'Times New Roman', Times, serif;
+                font-family: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Palatino', 'Georgia', serif;
                 font-size: 0.95em;
                 line-height: 1.5;
                 color: var(--text-color);
@@ -229,6 +235,9 @@
                 font-weight: bold;
                 border-right: 2px solid rgb(100, 0, 0);
                 user-select: none;
+                touch-action: none;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
                 /* position:relative; */
                 /* border-bottom: 1px solid red; */
             }
@@ -241,6 +250,11 @@
 
             .skill-pill:active {
                 cursor: grab;
+            }
+            
+            .skill-pill.dragging {
+                transform: scale(1.05);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             }
 
             /* .skill-pill::before {
@@ -273,7 +287,7 @@
 
             .body-text p {
                 margin-bottom: 1em;
-                font-family: sans-serif;
+                font-family: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Palatino', 'Georgia', serif;
             }
 
             /* Project Features Styling */
@@ -288,7 +302,7 @@
                 padding-left: 1.2em;
                 position: relative;
                 line-height: 1.5;
-                font-family: Georgia, 'Times New Roman', Times, serif;
+                font-family: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Palatino', 'Georgia', serif;
                 font-size: 0.95em;
             }
 
