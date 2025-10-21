@@ -169,6 +169,10 @@ document.addEventListener('DOMContentLoaded', function() {
         const nextBtn = document.querySelector('.modal-nav.next');
         const counter = document.querySelector('.modal-counter');
         
+        // Ensure playsInline is set for iOS
+        modalVideo.playsInline = true;
+        modalVideo.setAttribute('playsinline', '');
+        
         function loadVideo(index) {
             currentIndex = index;
             modalVideo.src = videos[index];
