@@ -20,7 +20,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Images for CEO project
     const images = {
-        'CEO': ['./ceo.png']
+        'CEO': ['./ceo.png'],
+        'CASCA': ['./casca.png']
     };
 
     const vids_by_project = videos.reduce((acc, url) => {
