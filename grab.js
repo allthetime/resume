@@ -179,10 +179,7 @@ function cleanup() {
 class Draggable {
     constructor(element) {
         this.elem = element;
-        // Only attach listeners if not mobile
-        if (!isMobile) {
-            this.attachListeners();
-        }
+        this.attachListeners();
     }
 
     handleStart = (e) => {
@@ -253,6 +250,8 @@ class Draggable {
     }
 }
 
-// Initialize draggable pills
-Array.from(pills).forEach(pill => new Draggable(pill));
+// Initialize draggable pills only if not mobile
+if (!isMobile) {
+    Array.from(pills).forEach(pill => new Draggable(pill));
+}
 
