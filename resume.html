@@ -44,33 +44,14 @@
         </header>
 
         <section>
-            <div class="skill-container" data-skills="react-native, typescript, css, linux, postgresql, redis, aws, zmq, interaction-design, animation, rust"></div>
+            <div class="skill-container" data-skills="react-native, typescript, css, linux, devops, infrastructure, postgresql, redis, aws, zmq, interaction-design, animation, rust"></div>
         </section>
-
-        <article>
-            <h2 class="link" data-link="https://onthisspot.ca" style="color:var(--blue)">On This Spot</h2>
-            <h3>CTO, Developer, Architect</h3>
-            <h4>App, Web, Data, Ops, Management</h4>
-            <section class="body-text">
-                <ul class="project-features">
-                    <li>Walking tour app based on exact locations of historical photos, enabling users to compare past and present through interactive photography</li>
-                    <li>React Native apps for Android and iOS with extensive Mapbox integration and custom GLSL shaders for interactive image editing</li>
-                    <li>Hybrid React components and server-rendered templates, currently migrating to Next.js architecture</li>
-                    <li>Node.js Express APIs, PostgreSQL database, and custom Rust-based image processing service</li>
-                    <li>Full codebase development with mentorship and direction of co-op students</li>
-                </ul>
-                <div class="media-slots" data-project-id="OTS">
-                    <!-- Media slots populated by vids.js -->
-                </div>
-            </section>
-        </article>
 
         <article>
             <h2 class="link" data-link="https://www.northshoreculturecompass.ca/pages/culture-quest" style="color:var(--purple)">North Shore Culture Quest</h2>
             <h3>Developer & Architect</h3>
             <h4>App, Data, Ops</h4>
             <section>
-                <span>Built it out </span>
                 <div class="media-slots" data-project-id="CQ">
                     <!-- Media slots populated by vids.js -->
                 </div>
@@ -82,8 +63,25 @@
             <h3>Developer & Architect</h3>
             <h4>App, Data, Ops</h4>
             <section>
-                <span>Built it out </span>
                 <div class="media-slots" data-project-id="TRIV">
+                    <!-- Media slots populated by vids.js -->
+                </div>
+            </section>
+        </article>
+
+                <article>
+            <h2 class="link" data-link="https://onthisspot.ca" style="color:var(--blue)">On This Spot</h2>
+            <h3>CTO, Developer, Architect</h3>
+            <h4>App, Web, Data, Ops, Management</h4>
+            <section class="body-text">
+                <!-- <ul class="project-features">
+                    <li>Walking tour app based on exact locations of historical photos, enabling users to compare past and present through interactive photography</li>
+                    <li>React Native apps for Android and iOS with extensive Mapbox integration and custom GLSL shaders for interactive image editing</li>
+                    <li>Hybrid React components and server-rendered templates, currently migrating to Next.js architecture</li>
+                    <li>Node.js Express APIs, PostgreSQL database, and custom Rust-based image processing service</li>
+                    <li>Full codebase development with mentorship and direction of co-op students</li>
+                </ul> -->
+                <div class="media-slots" data-project-id="OTS">
                     <!-- Media slots populated by vids.js -->
                 </div>
             </section>
@@ -95,6 +93,9 @@
             <h4>App, Data, Ops</h4>
             <section>
                 <span>Built it out </span>
+                <div class="media-slots" data-project-id="CASCA">
+                    <!-- Media slots populated by vids.js -->
+                </div>
             </section>
         </article>        
 
@@ -126,6 +127,8 @@
 
             const h2s = document.querySelectorAll('h2');
             h2s.forEach(h2=>{
+                // make underlined
+                h2.style.textDecoration = "underline";
                 h2.onclick = function () {
                     const link = this.getAttribute('data-link');
                     window.open(link, "_blank");

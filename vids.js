@@ -14,7 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
     "https://vid.reid.systems/TRIV-3.webm",
     "https://vid.reid.systems/TRIV-4.webm",
     "https://vid.reid.systems/TRIV-5.webm",
-    "https://vid.reid.systems/TRIV-7.webm"
+    "https://vid.reid.systems/TRIV-7.webm",
+    "https://vid.reid.systems/CASCA-1.mp4"
     ];
 
     const vids_by_project = videos.reduce((acc, url) => {
