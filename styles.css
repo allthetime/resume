@@ -605,17 +605,18 @@
             /* Mobile Responsiveness */
             @media (max-width: 768px) {
                 .video-nav-arrow {
-                    width: 30px;
-                    font-size: 20px;
+                    /* width: 30px; */
+                    /* font-size: 20px; */
+                    display: none !important;
                 }
 
-                .video-nav-arrow.left {
+                /* .video-nav-arrow.left {
                     left: 0;
                 }
 
                 .video-nav-arrow.right {
                     right: 0;
-                }
+                } */
 
                 .modal-close {
                     top: 10px;
