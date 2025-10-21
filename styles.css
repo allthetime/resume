@@ -656,7 +656,7 @@
                 }
 
                 #darkmode-selector {
-                    margin: 0,
-                    display: none;
+                    margin: 0;
+                    display: none !important;
                 }
             }
