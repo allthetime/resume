@@ -7,8 +7,10 @@
 
             :root {
                 --blue: rgb(1, 94, 170);
-                --yellow: rgb(211, 137, 0);
+                --yellow: rgba(251, 184, 16, 1);
                 --red: rgb(165, 0, 0);
+                --purple: rgba(182, 58, 254, 1);
+                --green: rgba(0, 165, 52, 1);
                 --text-color: black;
                 --background-color: rgb(255, 255, 255);
             }
