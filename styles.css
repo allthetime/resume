@@ -291,14 +291,22 @@
 
             .body-text {
                 /* width: clamp(300px,75%,600px); */
-                margin-top: 3em;
+                /* margin-top: 3em; */
                 margin-bottom: 1em;
                 margin-right: 1em;
             }
 
             .body-text p {
+                /* margin-bottom: 1em; */
+                font-family: -apple-system, BlinkMacSystemFont, 'SF Mono', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
+            }
+
+            .body-text p.special-note {
+                /* color: var(--yellow); */
                 margin-bottom: 1em;
+                font-size: 1em;
                 font-family: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Palatino', 'Georgia', serif;
+                opacity: 0.85;
             }
 
             /* Project Features Styling */
