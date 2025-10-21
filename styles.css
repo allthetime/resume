@@ -60,14 +60,14 @@
             }
 
             body {
-                margin-top: 10%;
-                margin-left: 5%;
-                margin-right: 5%;
-                background-color: var(--background-color);
+                margin-top: 10vh;
+                margin-left: 5vw;
+                margin-right: 5vw;
+                /* background-color: var(--background-color); */
                 color: var(--text-color);
-                margin-bottom: 10%;
-                transition: background-color 0.5s, color 0.75s;
-                overflow-x: hidden;
+                margin-bottom: 10vh;
+                /* transition: background-color 0.5s, color 0.75s; */
+                /* overflow-x: hidden; */
             }
 
             body.dark {
