@@ -12,15 +12,22 @@ let animationFrame = null;
 let longPressTimer = null;
 let longPressActivated = false;
 
-// Mouse events
-document.addEventListener('mousedown', startDrag);
-document.addEventListener('mouseup', endDrag);
-document.addEventListener('mousemove', onDrag);
+// Detect if device is mobile/touch-only
+const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || 
+                 (window.matchMedia && window.matchMedia("(max-width: 768px)").matches);
 
-// Touch events
-document.addEventListener('touchstart', startDrag, { passive: false });
-document.addEventListener('touchend', endDrag);
-document.addEventListener('touchmove', onDrag, { passive: false });
+// Only attach listeners if not mobile
+if (!isMobile) {
+    // Mouse events
+    document.addEventListener('mousedown', startDrag);
+    document.addEventListener('mouseup', endDrag);
+    document.addEventListener('mousemove', onDrag);
+
+    // Touch events
+    document.addEventListener('touchstart', startDrag, { passive: false });
+    document.addEventListener('touchend', endDrag);
+    document.addEventListener('touchmove', onDrag, { passive: false });
+}
 
 function startDrag() {
     if (currentDraggable && (isDragging || longPressActivated)) {
@@ -172,7 +179,10 @@ function cleanup() {
 class Draggable {
     constructor(element) {
         this.elem = element;
-        this.attachListeners();
+        // Only attach listeners if not mobile
+        if (!isMobile) {
+            this.attachListeners();
+        }
     }
 
     handleStart = (e) => {
