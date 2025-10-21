@@ -18,6 +18,11 @@ document.addEventListener('DOMContentLoaded', function() {
     "https://vid.reid.systems/CASCA-1.mp4"
     ];
 
+    // Images for CEO project
+    const images = {
+        'CEO': ['./ceo.png']
+    };
+
     const vids_by_project = videos.reduce((acc, url) => {
         const project = url.split('/').pop().split('-')[0];
         if (!acc[project]) {
@@ -32,6 +37,10 @@ document.addEventListener('DOMContentLoaded', function() {
     mediaSlotsContainers.forEach(container => {
         const projectId = container.getAttribute('data-project-id');
         const projectVideos = vids_by_project[projectId] || [];
+        const projectImages = images[projectId] || [];
+        const allMedia = [...projectVideos, ...projectImages];
+
+        if (allMedia.length === 0) return;
 
         // Create scroll wrapper
         const scrollWrapper = document.createElement('div');
@@ -135,10 +144,38 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Click handler to open modal
             videoWrapper.onclick = () => {
-                openVideoModal(projectVideos, index);
+                openVideoModal(allMedia, index);
             };
             
             scrollContainer.appendChild(videoWrapper);
+        });
+
+        // Add image thumbnails
+        projectImages.forEach((imageUrl, index) => {
+            const imageWrapper = document.createElement('div');
+            imageWrapper.className = 'video-thumbnail';
+            
+            const imageElement = document.createElement('img');
+            imageElement.src = imageUrl;
+            imageElement.alt = 'Project screenshot';
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'video-overlay';
+            
+            const expandIcon = document.createElement('div');
+            expandIcon.className = 'circle-button play-button';
+            expandIcon.textContent = '⊕';
+            
+            overlay.appendChild(expandIcon);
+            imageWrapper.appendChild(imageElement);
+            imageWrapper.appendChild(overlay);
+            
+            // Click handler to open modal
+            imageWrapper.onclick = () => {
+                openVideoModal(allMedia, projectVideos.length + index);
+            };
+            
+            scrollContainer.appendChild(imageWrapper);
         });
         
         scrollWrapper.appendChild(leftArrow);
@@ -158,12 +195,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // Modal functionality
-    function openVideoModal(videos, startIndex) {
+    function openVideoModal(media, startIndex) {
         let currentIndex = startIndex;
         let autoplayEnabled = true;
         
         const modal = document.getElementById('video-modal');
         const modalVideo = document.getElementById('modal-video');
+        const modalImage = document.getElementById('modal-image');
         const closeBtn = document.querySelector('.modal-close');
         const prevBtn = document.querySelector('.modal-nav.prev');
         const nextBtn = document.querySelector('.modal-nav.next');
@@ -173,32 +211,52 @@ document.addEventListener('DOMContentLoaded', function() {
         modalVideo.playsInline = true;
         modalVideo.setAttribute('playsinline', '');
         
-        function loadVideo(index) {
+        function isImage(url) {
+            return url.endsWith('.png') || url.endsWith('.jpg') || url.endsWith('.jpeg') || url.endsWith('.gif');
+        }
+        
+        function loadMedia(index) {
             currentIndex = index;
-            modalVideo.src = videos[index];
-            modalVideo.controls = false;
-            modalVideo.load(); // Force reload to ensure it's fresh
+            const mediaUrl = media[index];
+            const isImg = isImage(mediaUrl);
             
-            // Show loading state
-            modal.classList.add('loading');
-            
-            // Wait for video to be ready before playing
-            const canPlayHandler = () => {
+            if (isImg) {
+                // Show image, hide video
+                modalVideo.style.display = 'none';
+                modalVideo.pause();
+                modalVideo.src = '';
+                modalImage.style.display = 'block';
+                modalImage.src = mediaUrl;
                 modal.classList.remove('loading');
-                modalVideo.play().catch(err => {
-                    console.error('Play failed:', err);
-                    modalVideo.controls = true;
-                });
-                modalVideo.removeEventListener('canplay', canPlayHandler);
-            };
+            } else {
+                // Show video, hide image
+                modalImage.style.display = 'none';
+                modalVideo.style.display = 'block';
+                modalVideo.src = mediaUrl;
+                modalVideo.controls = false;
+                modalVideo.load(); // Force reload to ensure it's fresh
+                
+                // Show loading state
+                modal.classList.add('loading');
+                
+                // Wait for video to be ready before playing
+                const canPlayHandler = () => {
+                    modal.classList.remove('loading');
+                    modalVideo.play().catch(err => {
+                        console.error('Play failed:', err);
+                        modalVideo.controls = true;
+                    });
+                    modalVideo.removeEventListener('canplay', canPlayHandler);
+                };
+                
+                modalVideo.addEventListener('canplay', canPlayHandler);
+            }
             
-            modalVideo.addEventListener('canplay', canPlayHandler);
-            
-            counter.textContent = `${index + 1} / ${videos.length}`;
+            counter.textContent = `${index + 1} / ${media.length}`;
             
             // Update button states
             prevBtn.style.opacity = index === 0 ? '0.3' : '1';
-            nextBtn.style.opacity = index === videos.length - 1 ? '0.3' : '1';
+            nextBtn.style.opacity = index === media.length - 1 ? '0.3' : '1';
         }
         
         // Show controls when video pauses or ends
@@ -238,7 +296,7 @@ document.addEventListener('DOMContentLoaded', function() {
         modalVideo.addEventListener('touchstart', showControls);
         modalVideo.addEventListener('click', showControls);
         
-        loadVideo(currentIndex);
+        loadMedia(currentIndex);
         modal.style.display = 'flex';
         setTimeout(() => modal.classList.add('active'), 10);
         
@@ -261,14 +319,14 @@ document.addEventListener('DOMContentLoaded', function() {
         prevBtn.onclick = () => {
             autoplayEnabled = false;
             if (currentIndex > 0) {
-                loadVideo(currentIndex - 1);
+                loadMedia(currentIndex - 1);
             }
         };
         
         nextBtn.onclick = () => {
             autoplayEnabled = false;
-            if (currentIndex < videos.length - 1) {
-                loadVideo(currentIndex + 1);
+            if (currentIndex < media.length - 1) {
+                loadMedia(currentIndex + 1);
             }
         };
         
