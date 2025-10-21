@@ -70,6 +70,11 @@
                 /* overflow-x: hidden; */
             }
 
+            body.light {
+                background-color: rgb(255, 255, 255);
+                color: black;
+            }
+
             body.dark {
                 background-color: rgb(10, 10, 10);
                 color: white;

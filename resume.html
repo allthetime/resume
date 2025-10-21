@@ -156,17 +156,22 @@
 
             if (!darkmode_checkbox.checked) {
                 document.body.classList.add('dark');
+                document.body.classList.remove('light');
             } else {
                 canvas.classList.add('invisible');
+                document.body.classList.remove('dark');
+                document.body.classList.add('light');
             }
 
             darkmode_checkbox.onchange = function() {
                 const { checked } = this;
                 if (!checked) {
                     document.body.classList.add('dark');
+                    document.body.classList.remove('light');
                     canvas.classList.remove('invisible');
                 } else {
                     document.body.classList.remove('dark');
+                    document.body.classList.add('light');
                     canvas.classList.add('invisible');
                 }
             }
