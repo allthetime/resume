@@ -246,8 +246,8 @@
                 font-weight: bold;
                 border-right: 2px solid rgb(100, 0, 0);
                 user-select: none;
-                touch-action: none;
-                -webkit-touch-callout: none;
+                /* touch-action: none; */
+                /* -webkit-touch-callout: none; */
                 -webkit-user-select: none;
                 /* position:relative; */
                 /* border-bottom: 1px solid red; */
