@@ -60,23 +60,66 @@ document.addEventListener('DOMContentLoaded', function() {
             const videoWrapper = document.createElement('div');
             videoWrapper.className = 'video-thumbnail';
             
-        const videoElement = document.createElement('video');
-        videoElement.src = videoUrl;
-        videoElement.preload = 'metadata';
-        videoElement.muted = true;            // Add loading state
+            const videoElement = document.createElement('video');
+            videoElement.src = videoUrl;
+            videoElement.preload = 'metadata';
+            videoElement.muted = true;
+            videoElement.playsInline = true; // Critical for iOS
+            videoElement.setAttribute('playsinline', ''); // Alternative attribute for older iOS
+            
+            // Add loading state
             videoWrapper.classList.add('loading');
             
-            // When video metadata is loaded, show first frame
-            videoElement.addEventListener('loadeddata', () => {
-                videoWrapper.classList.remove('loading');
-                // Seek to 0.1 seconds to show a frame instead of black
-                videoElement.currentTime = 0.1;
-            });
+            let thumbnailLoaded = false;
+            
+            // iOS-friendly thumbnail loading
+            const loadThumbnail = async () => {
+                if (thumbnailLoaded) return;
+                
+                try {
+                    videoWrapper.classList.remove('loading');
+                    
+                    // For iOS, we need to load and briefly play the video to show a frame
+                    if (videoElement.readyState >= 2) { // HAVE_CURRENT_DATA
+                        thumbnailLoaded = true;
+                        
+                        // Try to seek to a frame - wrapped in try/catch for iOS
+                        try {
+                            videoElement.currentTime = 0.1;
+                        } catch (e) {
+                            // On iOS, try playing then immediately pausing
+                            try {
+                                await videoElement.play();
+                                videoElement.pause();
+                            } catch (playErr) {
+                                // If play fails, at least we tried
+                                console.log('Thumbnail generation limited on this device');
+                            }
+                        }
+                    }
+                } catch (e) {
+                    console.log('Thumbnail load attempt:', e);
+                }
+            };
+            
+            // Multiple event listeners for cross-browser compatibility
+            videoElement.addEventListener('loadedmetadata', loadThumbnail);
+            videoElement.addEventListener('loadeddata', loadThumbnail);
+            videoElement.addEventListener('canplay', loadThumbnail);
+            
+            // Fallback: Remove loading state after timeout
+            setTimeout(() => {
+                if (!thumbnailLoaded) {
+                    videoWrapper.classList.remove('loading');
+                    loadThumbnail();
+                }
+            }, 2000);
             
             // Handle errors
             videoElement.addEventListener('error', () => {
                 console.error('Failed to load video:', videoUrl);
                 videoWrapper.classList.add('error');
+                videoWrapper.classList.remove('loading');
             });
             
             const overlay = document.createElement('div');
