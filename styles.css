@@ -55,7 +55,7 @@
 
             .body-text span {
                 margin-top: 10px;
-                font-family: 'Charter', 'Iowan Old Style', 'Palatino Linotype', 'Palatino', 'Georgia', serif;
+                font-family: -apple-system, BlinkMacSystemFont, 'SF Mono', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
                 font-size: 0.9em;
             }
 
@@ -97,6 +97,7 @@
 
             /* Contact Links */
             .contact-links {
+                font-size: 1.3em;
                 display: flex;
                 flex-direction: column;
                 gap: 0.6em;
@@ -213,6 +214,7 @@
                 flex: 1;
                 max-width: 864;
                 padding: 2em;
+                margin-top: 2em;
                 /* border: 0.1px solid white;
                 border-left: 2px solid white;
                 border-right: 0.05px solid rgb(255, 255, 255);
@@ -320,7 +322,7 @@
 
             /* Media Slots Styling */
             .media-slots {
-                margin-top: 1.5em;
+                /* margin-top: 0.5em; */
                 position: relative;
             }
 

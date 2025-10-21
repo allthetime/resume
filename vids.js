@@ -60,12 +60,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const videoWrapper = document.createElement('div');
             videoWrapper.className = 'video-thumbnail';
             
-            const videoElement = document.createElement('video');
-            videoElement.src = videoUrl;
-            videoElement.preload = 'auto';
-            videoElement.muted = true;
-            
-            // Add loading state
+        const videoElement = document.createElement('video');
+        videoElement.src = videoUrl;
+        videoElement.preload = 'metadata';
+        videoElement.muted = true;            // Add loading state
             videoWrapper.classList.add('loading');
             
             // When video metadata is loaded, show first frame
@@ -165,12 +163,9 @@ document.addEventListener('DOMContentLoaded', function() {
             modalVideo.controls = false;
         }
         
-        // Auto-advance to next video when current video ends
+        // Show controls when video ends
         function handleVideoEnd() {
             modalVideo.controls = true;
-            if (autoplayEnabled && currentIndex < videos.length - 1) {
-                loadVideo(currentIndex + 1);
-            }
         }
         
         // Show controls on hover/touch
